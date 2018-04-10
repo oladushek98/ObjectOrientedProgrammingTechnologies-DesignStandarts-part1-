@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace Paint
 {
-    abstract class Figure
+    public abstract class Figure
     {
         public Point StartPoint { get; set; }
         public Point FinishPoint { get; set; }
+        public Pen Pen { get; set; }
         abstract public void Draw(Graphics graphics, Pen pen, Point StartPoint, Point FinishPoint);
     }
 }

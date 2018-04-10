@@ -12,13 +12,110 @@ namespace Paint
 {
     public partial class Form1 : Form
     {
+
+        FigureList figureList = new FigureList();
+        FigureCreatorList figureCreatorList = new FigureCreatorList();
+        Figure_Creator figureCreator;
+        Figure figure;
+
+        Color penColor = Color.Black;
+       
+        Pen pen = new Pen(Color.Black, 3);
+
+        public bool isClicked = false;
+
+        public struct FigureButtonInfo
+        {
+            public string figureName;
+            public Figure_Creator creator;
+        }
+
+        Point X, Y;
+
+
         public Form1()
         {
             InitializeComponent();
+
+            FigureButtonInfo[] figureButtonInfoArr = new FigureButtonInfo[]
+            {
+                new FigureButtonInfo { figureName = "Line", creator = new Line_Creator() },
+                new FigureButtonInfo { figureName = "Circle", creator = new Circle_Creator() },
+                new FigureButtonInfo { figureName = "Ellipse", creator = new Ellipse_Creator() },
+                new FigureButtonInfo { figureName = "Rectangle", creator = new Rectangle_Creator() },
+                new FigureButtonInfo { figureName = "Rhombus", creator = new Rhombus_Creator() },
+                new FigureButtonInfo { figureName = "Square", creator = new Square_Creator() }
+            };
+
+            Button button;
+            int X = 700;
+            int Y = 150;
+            foreach (var figureInfo in figureButtonInfoArr)
+            {
+                button = new Button();
+                button.Text = figureInfo.figureName;
+                button.Tag = figureInfo.creator;
+                button.Click += new EventHandler(FigureButton_Click);
+                button.Location = new Point(X, Y);
+                Y += 50;
+                button.Name = figureInfo.figureName;
+                button.Size = new Size(75, 23);
+                button.UseVisualStyleBackColor = true;
+                Controls.Add(button);
+            }
         }
 
-        Pen pen = new Pen(Color.Black, 3);
+        private void FigureButton_Click(object sender, EventArgs e)
+        {
+            Button clickedItem = (Button)sender;
+            figureCreator = (Figure_Creator)clickedItem.Tag;
+        }
 
+        private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (figureCreator != null)
+            {
+                figure = figureCreator.Create();
+                figure.Pen = pen;
+                isClicked = true;
+                X = new Point(e.X, e.Y);
+            }
+        }
+
+        private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            isClicked = false;
+            if (figure != null)
+            {
+                figureList.ReadyFigures.Add(figure);
+            }
+        }
+
+        public void PictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            if (figure != null)
+            {
+                figure.StartPoint = X;
+                figure.FinishPoint = Y;
+                figure.Draw(e.Graphics, figure.Pen, figure.StartPoint, figure.FinishPoint);
+                if (figureList.ReadyFigures.Count > 0)
+                {
+                    foreach (var fig in figureList.ReadyFigures)
+                    {
+                        fig.Draw(e.Graphics, fig.Pen, fig.StartPoint, fig.FinishPoint);
+                    }
+                }
+            }
+        }
+
+        private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isClicked)
+            {
+                Y = new Point(e.X, e.Y);
+                pictureBox1.Invalidate();
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
