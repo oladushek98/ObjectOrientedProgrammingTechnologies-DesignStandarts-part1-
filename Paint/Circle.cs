@@ -9,10 +9,17 @@ namespace Paint
 {
     class Circle : Figure
     {
-        public override void Draw(Graphics graphics, Pen pen, Point StartPoint, Point FinishPoint)
+        public override void Draw(Graphics g, Pen pen, Point StartPoint, Point FinishPoint)
         {
-            int width = FinishPoint.X - StartPoint.X;
-            graphics.DrawEllipse(pen, StartPoint.X, StartPoint.Y, width, width);
+            int Width = FinishPoint.X - StartPoint.X;
+            if (((Width > 0) && (FinishPoint.Y < StartPoint.Y)) || ((Width < 0) && (FinishPoint.Y > StartPoint.Y)))
+            {
+                g.DrawEllipse(pen, StartPoint.X, StartPoint.Y, Width, -Width);
+            }
+            else
+            {
+                g.DrawEllipse(pen, StartPoint.X, StartPoint.Y, Width, Width);
+            }
         }
     }
 }

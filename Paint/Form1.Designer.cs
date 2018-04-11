@@ -30,6 +30,7 @@
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.AllFigures = new System.Windows.Forms.Button();
+            this.CleanBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,11 +57,22 @@
             this.AllFigures.UseVisualStyleBackColor = true;
             this.AllFigures.Click += new System.EventHandler(this.button1_Click);
             // 
+            // CleanBtn
+            // 
+            this.CleanBtn.Location = new System.Drawing.Point(940, 740);
+            this.CleanBtn.Name = "CleanBtn";
+            this.CleanBtn.Size = new System.Drawing.Size(96, 36);
+            this.CleanBtn.TabIndex = 3;
+            this.CleanBtn.Text = "Clean";
+            this.CleanBtn.UseVisualStyleBackColor = true;
+            this.CleanBtn.Click += new System.EventHandler(this.CleanBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1086, 855);
+            this.Controls.Add(this.CleanBtn);
             this.Controls.Add(this.AllFigures);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
@@ -74,6 +86,7 @@
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button AllFigures;
+        private System.Windows.Forms.Button CleanBtn;
     }
 }
 

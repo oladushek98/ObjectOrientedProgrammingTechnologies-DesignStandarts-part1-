@@ -117,6 +117,12 @@ namespace Paint
             }
         }
 
+        private void CleanBtn_Click(object sender, EventArgs e)
+        {
+            pictureBox1.Image.Dispose();
+            pictureBox1.Image = null;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             Graphics graphics = pictureBox1.CreateGraphics();

@@ -9,12 +9,11 @@ namespace Paint
 {
     class Ellipse : Figure
     {
-
-        public override void Draw(Graphics graphics, Pen pen, Point StartPoint, Point FinishPoint)
+        public override void Draw(Graphics g, Pen pen, Point StartPoint, Point FinishPoint)
         {
-            int width = FinishPoint.Y - StartPoint.Y;
-            int height = FinishPoint.X - StartPoint.X;
-            graphics.DrawEllipse(pen, StartPoint.X, StartPoint.Y, width, height);
+            int Height = FinishPoint.Y - StartPoint.Y;
+            int Width = FinishPoint.X - StartPoint.X;
+            g.DrawEllipse(pen, StartPoint.X, StartPoint.Y, Width, Height);
         }
     }
 }
