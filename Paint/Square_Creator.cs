@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Paint
 {
-    class Square_Creator : Figure_Creator
+    class Square_Creator : ICreator
     {
-        public override Figure Create()
+        public  Figure Create()
         {
             return new Square();
         }

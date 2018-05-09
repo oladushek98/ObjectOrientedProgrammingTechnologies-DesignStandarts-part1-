@@ -15,7 +15,7 @@ namespace Paint
 
         FigureList figureList = new FigureList();
         FigureCreatorList figureCreatorList = new FigureCreatorList();
-        Figure_Creator figureCreator;
+        ICreator figureCreator;
         Figure figure;
 
         Color penColor = Color.Black;
@@ -27,7 +27,7 @@ namespace Paint
         public struct FigureButtonInfo
         {
             public string figureName;
-            public Figure_Creator creator;
+            public ICreator creator;
         }
 
         Point X, Y;
@@ -68,7 +68,7 @@ namespace Paint
         private void FigureButton_Click(object sender, EventArgs e)
         {
             Button clickedItem = (Button)sender;
-            figureCreator = (Figure_Creator)clickedItem.Tag;
+            figureCreator = (ICreator)clickedItem.Tag;
         }
 
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)

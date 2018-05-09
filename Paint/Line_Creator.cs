@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Paint
 {
-    class Line_Creator : Figure_Creator
+    class Line_Creator : ICreator
     {
-        public override Figure Create()
+        public  Figure Create()
         {
             return new Line();
         }

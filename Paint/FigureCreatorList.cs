@@ -8,7 +8,7 @@ namespace Paint
 {
     class FigureCreatorList
     {
-        public List<Figure_Creator> Creators = new List<Figure_Creator> {
+        public List<ICreator> Creators = new List<ICreator> {
             new Line_Creator(),
             new Square_Creator(),
             new Circle_Creator(),

@@ -65,6 +65,7 @@
             this.CleanBtn.TabIndex = 3;
             this.CleanBtn.Text = "Clean";
             this.CleanBtn.UseVisualStyleBackColor = true;
+            this.CleanBtn.Visible = false;
             this.CleanBtn.Click += new System.EventHandler(this.CleanBtn_Click);
             // 
             // Form1

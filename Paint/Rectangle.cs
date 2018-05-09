@@ -9,7 +9,7 @@ namespace Paint
 {
     class Rectangle : Figure
     {
-        public override void Draw(Graphics g, Pen pen, Point StartPoint, Point FinishPoint)
+        public override void Draw(Graphics graphics, Pen pen, Point StartPoint, Point FinishPoint)
         {
             int Height = Math.Abs(FinishPoint.Y - StartPoint.Y);
             int Width = Math.Abs(FinishPoint.X - StartPoint.X);
@@ -21,7 +21,7 @@ namespace Paint
             {
                 StartPoint = new Point(FinishPoint.X, StartPoint.Y);
             }
-            g.DrawRectangle(pen, StartPoint.X, StartPoint.Y, Width, Height);
+            graphics.DrawRectangle(pen, StartPoint.X, StartPoint.Y, Width, Height);
         }
     }
 }

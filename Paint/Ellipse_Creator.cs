@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Paint
 {
-    class Ellipse_Creator : Figure_Creator
+    class Ellipse_Creator : ICreator
     {
-        public override Figure Create()
+        public Figure Create()
         {
             return new Ellipse();
         }
