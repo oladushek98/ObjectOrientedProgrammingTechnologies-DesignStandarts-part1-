@@ -32,7 +32,6 @@ namespace Paint
 
         Point X, Y;
 
-
         public Form1()
         {
             InitializeComponent();
@@ -46,6 +45,7 @@ namespace Paint
                 new FigureButtonInfo { figureName = "Rhombus", creator = new Rhombus_Creator() },
                 new FigureButtonInfo { figureName = "Square", creator = new Square_Creator() }
             };
+
 
             Button button;
             int X = 700;
@@ -63,12 +63,20 @@ namespace Paint
                 button.UseVisualStyleBackColor = true;
                 Controls.Add(button);
             }
+
+            X = 800;
+            Y = 300;
+
         }
 
         private void FigureButton_Click(object sender, EventArgs e)
         {
             Button clickedItem = (Button)sender;
             figureCreator = (ICreator)clickedItem.Tag;
+            if (figure != null)
+            {
+                figureList.ReadyFigures.Add(figure);
+            }
         }
 
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -79,6 +87,10 @@ namespace Paint
                 figure.Pen = pen;
                 isClicked = true;
                 X = new Point(e.X, e.Y);
+                /*if (figure != null)
+                {
+                    figureList.ReadyFigures.Add(figure);
+                }*/
             }
         }
 
@@ -121,6 +133,20 @@ namespace Paint
         {
             pictureBox1.Image.Dispose();
             pictureBox1.Image = null;
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            var serializer = new Serializer();
+            serializer.Serialize(figureList.ReadyFigures);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var serializer = new Serializer();
+            pictureBox1.Invalidate();
+            serializer.Deserialize(figureList.ReadyFigures);
+            pictureBox1.Invalidate();
         }
 
         private void button1_Click(object sender, EventArgs e)

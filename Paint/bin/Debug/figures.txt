@@ -1,0 +1,1 @@
+{"$type":"System.Collections.Generic.List`1[[Paint.Figure, Paint]], mscorlib","$values":[{"$type":"Paint.Ellipse, Paint","StartPoint":"284, 200","FinishPoint":"440, 166","PenColor":"Black","PenWidth":3.0},{"$type":"Paint.Rhombus, Paint","StartPoint":"427, 353","FinishPoint":"271, 391","PenColor":"Black","PenWidth":3.0}]}
