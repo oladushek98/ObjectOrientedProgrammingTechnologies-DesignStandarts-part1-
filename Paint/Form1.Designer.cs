@@ -57,7 +57,7 @@
             this.AllFigures.TabIndex = 2;
             this.AllFigures.Text = "All figures";
             this.AllFigures.UseVisualStyleBackColor = true;
-            this.AllFigures.Click += new System.EventHandler(this.button1_Click);
+            this.AllFigures.Click += new System.EventHandler(this.AllFigures_Click);
             // 
             // CleanBtn
             // 
@@ -78,7 +78,7 @@
             this.SerializeBtn.TabIndex = 4;
             this.SerializeBtn.Text = "Serialize";
             this.SerializeBtn.UseVisualStyleBackColor = true;
-            this.SerializeBtn.Click += new System.EventHandler(this.button1_Click_1);
+            this.SerializeBtn.Click += new System.EventHandler(this.SerializeBtn_Click);
             // 
             // DeserializeBtn
             // 
@@ -88,13 +88,13 @@
             this.DeserializeBtn.TabIndex = 5;
             this.DeserializeBtn.Text = "Deserialize";
             this.DeserializeBtn.UseVisualStyleBackColor = true;
-            this.DeserializeBtn.Click += new System.EventHandler(this.button2_Click);
+            this.DeserializeBtn.Click += new System.EventHandler(this.DeserializeBtn_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1086, 855);
+            this.ClientSize = new System.Drawing.Size(1252, 855);
             this.Controls.Add(this.DeserializeBtn);
             this.Controls.Add(this.SerializeBtn);
             this.Controls.Add(this.CleanBtn);

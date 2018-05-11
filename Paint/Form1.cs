@@ -19,8 +19,9 @@ namespace Paint
         Figure figure;
 
         Color penColor = Color.Black;
-       
-        Pen pen = new Pen(Color.Black, 3);
+        float width = 3;
+
+        Point X, Y;
 
         public bool isClicked = false;
 
@@ -30,7 +31,18 @@ namespace Paint
             public ICreator creator;
         }
 
-        Point X, Y;
+        public struct FigureColorInfo
+        {
+            public string colorName;
+            public Color color;
+        }
+
+        public struct FigureWidthInfo
+        {
+            public string widthValue;
+            public float width;
+        }
+        
 
         public Form1()
         {
@@ -46,10 +58,71 @@ namespace Paint
                 new FigureButtonInfo { figureName = "Square", creator = new Square_Creator() }
             };
 
+            FigureColorInfo[] figureColorInfoArr = new FigureColorInfo[]
+            {
+                new FigureColorInfo { colorName = "Black", color = Color.Black  },
+                new FigureColorInfo { colorName = "Red", color = Color.Red },
+                new FigureColorInfo { colorName = "Orange", color = Color.Orange },
+                new FigureColorInfo { colorName = "Yellow", color = Color.Yellow },
+                new FigureColorInfo { colorName = "Green", color = Color.Green },
+                new FigureColorInfo { colorName = "Blue", color = Color.Blue },
+                new FigureColorInfo { colorName = "Purple", color = Color.Purple },
+                new FigureColorInfo { colorName = "Gray", color = Color.Gray },
+            };
+               
+            FigureWidthInfo[] figureWidthInfoArr = new FigureWidthInfo[]
+            {
+                new FigureWidthInfo { widthValue = "1", width = 1 },
+                new FigureWidthInfo { widthValue = "2", width = 2 },
+                new FigureWidthInfo { widthValue = "3", width = 3 },
+                new FigureWidthInfo { widthValue = "4", width = 4 },
+                new FigureWidthInfo { widthValue = "5", width = 5}
+            };
+
+            int X = 900;
+            int Y = 150;
+            RadioButton radioButton, radioButton1;
+            foreach (var widthInfo in figureWidthInfoArr)
+            {
+                radioButton1 = new RadioButton();
+                radioButton1.Name = widthInfo.widthValue;
+                radioButton1.Text = widthInfo.widthValue;
+                if (radioButton1.Name == "3")
+                {
+                    radioButton1.Checked = true;
+                }
+                radioButton1.CheckedChanged += new EventHandler(FigureWidth_ChechedChange);
+                radioButton1.Location = new Point(X, Y);
+                radioButton1.AutoSize = true;
+                Y += 50;
+                radioButton1.Tag = widthInfo.width;
+                radioButton1.UseVisualStyleBackColor = true;
+                Controls.Add(radioButton1);
+            }
+
+            X = 800;
+            Y = 150;
+            foreach (var colorInfo in figureColorInfoArr)
+            {
+                radioButton = new RadioButton();
+                radioButton.Name = colorInfo.colorName;
+                radioButton.Text = colorInfo.colorName;
+                if (radioButton.Name == "Black")
+                {
+                    radioButton.Checked = true;
+                }
+                radioButton.CheckedChanged += new EventHandler(FigureColor_CheckedChange);
+                radioButton.Location = new Point(X, Y);
+                radioButton.AutoSize = true;
+                Y += 50;
+                radioButton.Tag = colorInfo.color;
+                radioButton.UseVisualStyleBackColor = true;
+                Controls.Add(radioButton);
+            }
 
             Button button;
-            int X = 700;
-            int Y = 150;
+            X = 700;
+            Y = 150;
             foreach (var figureInfo in figureButtonInfoArr)
             {
                 button = new Button();
@@ -63,10 +136,18 @@ namespace Paint
                 button.UseVisualStyleBackColor = true;
                 Controls.Add(button);
             }
+        }
 
-            X = 800;
-            Y = 300;
+        private void FigureWidth_ChechedChange(object sender, EventArgs e)
+        {
+            RadioButton checkedItem = (RadioButton)sender;
+            width = (float)checkedItem.Tag;
+        }
 
+        private void FigureColor_CheckedChange(object sender, EventArgs e)
+        {
+            RadioButton checkedItem = (RadioButton)sender;
+            penColor = (Color)checkedItem.Tag;
         }
 
         private void FigureButton_Click(object sender, EventArgs e)
@@ -80,7 +161,7 @@ namespace Paint
             if (figureCreator != null)
             {
                 figure = figureCreator.Create();
-                figure.Pen = pen;
+                figure.Pen = new Pen(penColor, width);
                 isClicked = true;
                 X = new Point(e.X, e.Y);
             }
@@ -127,13 +208,13 @@ namespace Paint
             pictureBox1.Image = null;
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void SerializeBtn_Click(object sender, EventArgs e)
         {
             var serializer = new Serializer();
             serializer.Serialize(figureList.ReadyFigures);
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void DeserializeBtn_Click(object sender, EventArgs e)
         {
             var serializer = new Serializer();
             pictureBox1.Invalidate();
@@ -142,7 +223,7 @@ namespace Paint
             figure = null;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void AllFigures_Click(object sender, EventArgs e)
         {
             Graphics graphics = pictureBox1.CreateGraphics();
             FigureList FigureList = new FigureList();
@@ -154,6 +235,7 @@ namespace Paint
             foreach (var fig in FigureList.Figures)
             {
                 Figure figure = fig;
+                var pen = new Pen(penColor, width);
                 fig.StartPoint = new Point(startX, startY);
                 fig.FinishPoint = new Point(finishX, finishY);
                 figure.Draw(graphics, pen, fig.StartPoint, fig.FinishPoint);
