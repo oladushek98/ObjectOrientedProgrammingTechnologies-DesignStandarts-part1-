@@ -73,10 +73,6 @@ namespace Paint
         {
             Button clickedItem = (Button)sender;
             figureCreator = (ICreator)clickedItem.Tag;
-           /* figure = figureCreator.Create();
-            
-                figureList.ReadyFigures.Add(figure);*/
-            
         }
 
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -87,10 +83,6 @@ namespace Paint
                 figure.Pen = pen;
                 isClicked = true;
                 X = new Point(e.X, e.Y);
-                /*if (figure != null)
-                {
-                    figureList.ReadyFigures.Add(figure);
-                }*/
             }
         }
 
@@ -110,16 +102,7 @@ namespace Paint
                 figure.StartPoint = X;
                 figure.FinishPoint = Y;
                 figure.Draw(e.Graphics, figure.Pen, figure.StartPoint, figure.FinishPoint);
-                /*if (figureList.ReadyFigures.Count > 0)
-                {
-                    foreach (var fig in figureList.ReadyFigures)
-                    {
-                        fig.Draw(e.Graphics, fig.Pen, fig.StartPoint, fig.FinishPoint);
-                    }
-                }*/
-                //figureList.ReadyFigures.Add(figure);
             }
-            //pictureBox1.Invalidate();
             if (figureList.ReadyFigures.Count > 0)
             {
                 foreach (var fig in figureList.ReadyFigures)
@@ -135,10 +118,6 @@ namespace Paint
             {
                 Y = new Point(e.X, e.Y);
                 pictureBox1.Invalidate();
-                /*if (figure != null)
-                {
-                    figureList.ReadyFigures.Add(figure);
-                }*/
             }
         }
 
@@ -161,15 +140,6 @@ namespace Paint
             serializer.Deserialize(figureList.ReadyFigures);
             pictureBox1.Invalidate();
             figure = null;
-            //pictureBox1.Invalidate();
-            /*if (figureList.ReadyFigures.Count > 0)
-             {
-                 foreach (var fig in figureList.ReadyFigures)
-                 {
-                     fig.Draw(e.Graphics, fig.Pen, fig.StartPoint, fig.FinishPoint);
-                 }
-             }*/
-            //figure = figureList.ReadyFigures[0];
         }
 
         private void button1_Click(object sender, EventArgs e)
