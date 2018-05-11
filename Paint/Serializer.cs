@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using System.Runtime.Serialization.JSON;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
@@ -40,7 +39,7 @@ namespace Paint
                     //{
                     var json = new StreamReader(fStream).ReadToEnd();
                     var figures = JsonConvert.DeserializeObject<List<Figure>>(json, settings);
-                        foreach (var figure in figures)
+                    foreach (var figure in figures)
                         list.Add(figure);
                     //}
                 }
