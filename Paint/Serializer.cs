@@ -8,6 +8,8 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Drawing;
 using Newtonsoft.Json;
+using System.Windows.Forms;
+using AbstractClassLibrary;
 
 namespace Paint
 {
@@ -17,7 +19,6 @@ namespace Paint
         readonly JsonSerializerSettings settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
         public void Serialize(List<Figure> list)
         {
-            //var jsonFrmatter = new DataContractJsonSerializer(typeof(List<Figure>));
             using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate | FileMode.Truncate))
             {
                 var json = JsonConvert.SerializeObject(list, Formatting.None, settings);
@@ -30,19 +31,27 @@ namespace Paint
         public void Deserialize(List<Figure> list)
         {
             list.Clear();
-            //var jsonFormatter = new DataContractJsonSerializer(typeof(List<Figure>));
-            //try
+            try
             {
                 using (var fStream = File.OpenRead(fileName))
                 {
-                    // try
-                    //{
-                    var json = new StreamReader(fStream).ReadToEnd();
-                    var figures = JsonConvert.DeserializeObject<List<Figure>>(json, settings);
-                    foreach (var figure in figures)
-                        list.Add(figure);
-                    //}
+                    try
+                    {
+                        var json = new StreamReader(fStream).ReadToEnd();
+                        var figures = JsonConvert.DeserializeObject<List<Figure>>(json, settings);
+                        foreach (var figure in figures)
+                            list.Add(figure);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        MessageBox.Show("Deserialization error! Check the file content!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        list.Clear();
+                    }
                 }
+            }
+            catch (FileNotFoundException)
+            {
+                MessageBox.Show("File not found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

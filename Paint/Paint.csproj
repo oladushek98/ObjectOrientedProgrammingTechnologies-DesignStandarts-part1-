@@ -51,31 +51,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Circle.cs" />
-    <Compile Include="Circle_Creator.cs" />
-    <Compile Include="Ellipse.cs" />
-    <Compile Include="Ellipse_Creator.cs" />
     <Compile Include="FigureCreatorList.cs" />
     <Compile Include="FigureList.cs" />
-    <Compile Include="Figure_Creator.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Line.cs" />
-    <Compile Include="Line_Creator.cs" />
-    <Compile Include="Rectangle_Creator.cs" />
-    <Compile Include="Rhombus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Figure.cs" />
-    <Compile Include="Rectangle.cs" />
-    <Compile Include="Rhombus_Creator.cs" />
     <Compile Include="Serializer.cs" />
-    <Compile Include="Square.cs" />
-    <Compile Include="Square_Creator.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -101,6 +87,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AbstractClassLibrary\AbstractClassLibrary.csproj">
+      <Project>{f6094987-d87b-4aeb-b4ef-797fc6a519bf}</Project>
+      <Name>AbstractClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

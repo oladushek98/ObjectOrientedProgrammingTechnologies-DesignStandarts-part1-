@@ -1,0 +1,9 @@
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\CircleLibrary\bin\Debug\CircleLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\CircleLibrary\bin\Debug\CircleLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\CircleLibrary\bin\Debug\AbstractClassLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\CircleLibrary\bin\Debug\AbstractClassLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\CircleLibrary\obj\Debug\CircleLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\CircleLibrary\obj\Debug\CircleLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\CircleLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\CircleLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\CircleLibrary\obj\Debug\CircleLibrary.csprojResolveAssemblyReference.cache

@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using AbstractClassLibrary;
+using System.Reflection;
+using System.IO;
 
 namespace Paint
 {
@@ -42,13 +40,16 @@ namespace Paint
             public string widthValue;
             public float width;
         }
-        
 
         public Form1()
         {
             InitializeComponent();
 
-            FigureButtonInfo[] figureButtonInfoArr = new FigureButtonInfo[]
+            AddPlugins();
+            string[] figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+            List<FigureButtonInfo> figureButtonInfoArr = new List<FigureButtonInfo>();
+
+           /* FigureButtonInfo[] figureButtonInfoArr = new FigureButtonInfo[]
             {
                 new FigureButtonInfo { figureName = "Line", creator = new Line_Creator() },
                 new FigureButtonInfo { figureName = "Circle", creator = new Circle_Creator() },
@@ -56,7 +57,21 @@ namespace Paint
                 new FigureButtonInfo { figureName = "Rectangle", creator = new Rectangle_Creator() },
                 new FigureButtonInfo { figureName = "Rhombus", creator = new Rhombus_Creator() },
                 new FigureButtonInfo { figureName = "Square", creator = new Square_Creator() }
-            };
+            };*/
+
+            foreach (var Creator in figureCreatorList.Creators)
+            {
+                foreach(var FigureName in figureNames)
+                {
+                    if ((Creator).ToString().Contains(FigureName))
+                    {
+                        figureButtonInfoArr.Add(new FigureButtonInfo{
+                            figureName = FigureName,
+                            creator = Creator
+                        });
+                    }
+                }
+            }
 
             FigureColorInfo[] figureColorInfoArr = new FigureColorInfo[]
             {
@@ -76,8 +91,9 @@ namespace Paint
                 new FigureWidthInfo { widthValue = "2", width = 2 },
                 new FigureWidthInfo { widthValue = "3", width = 3 },
                 new FigureWidthInfo { widthValue = "4", width = 4 },
-                new FigureWidthInfo { widthValue = "5", width = 5}
+                new FigureWidthInfo { widthValue = "5", width = 5 }
             };
+
 
             int X = 900;
             int Y = 150;
@@ -223,34 +239,66 @@ namespace Paint
             figure = null;
         }
 
-        private void AllFigures_Click(object sender, EventArgs e)
+        //private void AllFigures_Click(object sender, EventArgs e)
+        //{
+        //    Graphics graphics = pictureBox1.CreateGraphics();
+        //    FigureList FigureList = new FigureList();
+        //    int startX = 80;
+        //    int startY = 20;
+        //    int finishX = 160;
+        //    int finishY = startY + 60;
+
+        //    foreach (var fig in FigureList.Figures)
+        //    {
+        //        Figure figure = fig;
+        //        var pen = new Pen(penColor, width);
+        //        fig.StartPoint = new Point(startX, startY);
+        //        fig.FinishPoint = new Point(finishX, finishY);
+        //        figure.Draw(graphics, pen, fig.StartPoint, fig.FinishPoint);
+        //        startY += 100;
+        //        finishY = startY + 50;
+
+        //        if (figure != null)
+        //            FigureList.ReadyFigures.Add(figure);
+
+        //        if (FigureList.ReadyFigures.Count > 0)
+        //        {
+        //            foreach (var readyfig in FigureList.ReadyFigures)
+        //            {
+        //                readyfig.Draw(graphics, pen, readyfig.StartPoint, readyfig.FinishPoint);
+        //            }
+        //        }
+        //    }
+        //}
+
+        public void AddPlugins()
         {
-            Graphics graphics = pictureBox1.CreateGraphics();
-            FigureList FigureList = new FigureList();
-            int startX = 80;
-            int startY = 20;
-            int finishX = 160;
-            int finishY = startY + 60;
+            // Находим каталог, содержащий файл Host.exe      
+            String AddInDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            // Предполагается, что сборки подключаемых модулей       
+            // находятся в одном каталоге с EXE-файлом хоста       
+            var AddInAssemblies = Directory.EnumerateFiles(AddInDir, "*Library.dll");
+            // Создание набора объектов Type, которые могут       
+            // использоваться хостом  
 
-            foreach (var fig in FigureList.Figures)
+            foreach (var ass in AddInAssemblies)
             {
-                Figure figure = fig;
-                var pen = new Pen(penColor, width);
-                fig.StartPoint = new Point(startX, startY);
-                fig.FinishPoint = new Point(finishX, finishY);
-                figure.Draw(graphics, pen, fig.StartPoint, fig.FinishPoint);
-                startY += 100;
-                finishY = startY + 50;
-
-                if (figure != null)
-                    FigureList.ReadyFigures.Add(figure);
-
-                if (FigureList.ReadyFigures.Count > 0)
+                try
                 {
-                    foreach (var readyfig in FigureList.ReadyFigures)
+                    Assembly assembly = Assembly.LoadFrom(ass);
+                    Type[] types = assembly.GetExportedTypes();
+                    foreach (var type in types)
                     {
-                        readyfig.Draw(graphics, pen, readyfig.StartPoint, readyfig.FinishPoint);
+                        if (type.IsClass && typeof(ICreator).GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()))
+                        {
+                            var plugin = Activator.CreateInstance(type);
+                            figureCreatorList.Creators.Add((ICreator)plugin);
+                        }
                     }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

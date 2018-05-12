@@ -1,0 +1,9 @@
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\SquareLibrary\bin\Debug\SquareLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\SquareLibrary\bin\Debug\SquareLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\SquareLibrary\bin\Debug\AbstractClassLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\SquareLibrary\bin\Debug\AbstractClassLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\SquareLibrary\obj\Debug\SquareLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\SquareLibrary\obj\Debug\SquareLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\SquareLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\SquareLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\SquareLibrary\obj\Debug\SquareLibrary.csprojResolveAssemblyReference.cache

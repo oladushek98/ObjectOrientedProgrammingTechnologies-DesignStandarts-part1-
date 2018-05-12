@@ -1,0 +1,8 @@
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\LineLibrary\bin\Debug\LineLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\LineLibrary\bin\Debug\LineLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\LineLibrary\bin\Debug\AbstractClassLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\LineLibrary\bin\Debug\AbstractClassLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\LineLibrary\obj\Debug\LineLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\LineLibrary\obj\Debug\LineLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\LineLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\LineLibrary.pdb

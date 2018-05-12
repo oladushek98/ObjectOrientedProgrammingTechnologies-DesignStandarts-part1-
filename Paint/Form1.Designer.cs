@@ -57,7 +57,6 @@
             this.AllFigures.TabIndex = 2;
             this.AllFigures.Text = "All figures";
             this.AllFigures.UseVisualStyleBackColor = true;
-            this.AllFigures.Click += new System.EventHandler(this.AllFigures_Click);
             // 
             // CleanBtn
             // 

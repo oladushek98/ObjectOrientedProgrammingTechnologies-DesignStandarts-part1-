@@ -9,3 +9,4 @@ D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\obj\Debug\Paint.exe
 D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\obj\Debug\Paint.pdb
 D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\Newtonsoft.Json.dll
 D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\Newtonsoft.Json.xml
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\AbstractClassLibrary.pdb

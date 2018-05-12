@@ -1,0 +1,9 @@
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\EllipseLibrary\bin\Debug\EllipseLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\EllipseLibrary\bin\Debug\EllipseLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\EllipseLibrary\bin\Debug\AbstractClassLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\EllipseLibrary\bin\Debug\AbstractClassLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\EllipseLibrary\obj\Debug\EllipseLibrary.csprojResolveAssemblyReference.cache
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\EllipseLibrary\obj\Debug\EllipseLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\EllipseLibrary\obj\Debug\EllipseLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\EllipseLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\EllipseLibrary.pdb

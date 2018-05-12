@@ -1,0 +1,9 @@
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\RectangleLibrary\bin\Debug\RectangleLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\RectangleLibrary\bin\Debug\RectangleLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\RectangleLibrary\bin\Debug\AbstractClassLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\RectangleLibrary\bin\Debug\AbstractClassLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\RectangleLibrary\obj\Debug\RectangleLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\RectangleLibrary\obj\Debug\RectangleLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\RectangleLibrary.dll
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\Paint\bin\Debug\RectangleLibrary.pdb
+D:\Универ\ООП(ч.1)\Лаба1-2\Paint\RectangleLibrary\obj\Debug\RectangleLibrary.csprojResolveAssemblyReference.cache
