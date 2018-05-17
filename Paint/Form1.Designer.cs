@@ -73,9 +73,9 @@
             // 
             // SerializeBtn
             // 
-            this.SerializeBtn.Location = new System.Drawing.Point(925, 664);
+            this.SerializeBtn.Location = new System.Drawing.Point(917, 657);
             this.SerializeBtn.Name = "SerializeBtn";
-            this.SerializeBtn.Size = new System.Drawing.Size(75, 23);
+            this.SerializeBtn.Size = new System.Drawing.Size(125, 35);
             this.SerializeBtn.TabIndex = 4;
             this.SerializeBtn.Text = "Serialize";
             this.SerializeBtn.UseVisualStyleBackColor = true;
@@ -83,9 +83,9 @@
             // 
             // DeserializeBtn
             // 
-            this.DeserializeBtn.Location = new System.Drawing.Point(1043, 664);
+            this.DeserializeBtn.Location = new System.Drawing.Point(1085, 659);
             this.DeserializeBtn.Name = "DeserializeBtn";
-            this.DeserializeBtn.Size = new System.Drawing.Size(98, 23);
+            this.DeserializeBtn.Size = new System.Drawing.Size(155, 33);
             this.DeserializeBtn.TabIndex = 5;
             this.DeserializeBtn.Text = "Deserialize";
             this.DeserializeBtn.UseVisualStyleBackColor = true;

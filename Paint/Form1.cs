@@ -26,6 +26,17 @@ namespace Paint
 
         public bool isClicked = false;
 
+        List<Color> colorList = new List<Color>()
+        {
+            Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Purple, Color.Gray
+        };
+
+        List<string> languageList = new List<string>()
+        {
+            "English", "Russian"
+        };
+
+
         public struct FigureButtonInfo
         {
             public string figureName;
@@ -50,35 +61,77 @@ namespace Paint
 
             AddPlugins();
 
+            Init();
+        }
+
+
+        private void Init()
+        {
+
+            // reading the language of the program interface
+            string language = null;
+            try
+            {
+                foreach(XElement lan in xDoc.Element("config").Elements("language"))
+                {
+                    language = lan.Attribute("lang").Value;
+                    bool correct = false;
+                    foreach(string lang in languageList)
+                    {
+                        if (language == lang)
+                        {
+                            correct = true;
+                        }
+                    }
+                    if (correct == false)
+                    {
+                        language = "English";
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+
             // reading info about buttons for figure drawing from .xml file
             int butLength = 0, butWidth = 0;
-            string butLanguage = "";
-            foreach (XElement but in xDoc.Element("config").Elements("button"))
+            try
             {
-                XElement sizeL = but.Element("length");
-                butLength = Int32.Parse(sizeL.Value);
-                XElement sizeW = but.Element("width");
-                butWidth = Int32.Parse(sizeW.Value);
-                butLanguage = but.Element("language").Value;
+                foreach (XElement but in xDoc.Element("config").Elements("button"))
+                {
+                    XElement sizeL = but.Element("length");
+                    butLength = Int32.Parse(sizeL.Value);
+                    XElement sizeW = but.Element("width");
+                    butWidth = Int32.Parse(sizeW.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             // creating of components info arrays
-            string[] figureNames = null;
-            string[] figureNamesRus = null;
-            if (butLanguage == "English")
+            string[] figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+            string[] figureNamesLan = null;
+            if (language == "Russian")
             {
-                figureNames = new string []{ "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+                figureNamesLan = new string[] { "Линия", "Прямоугольник", "Квадрат", "Ромб", "Окружность", "Эллипс" };
             }
-            else if (butLanguage == "Russian")
+
+            string[] figureColors = new string[] { "Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Gray" };
+            string[] figureColorsLan = null;
+            if (language == "Russian")
             {
-                figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
-                figureNamesRus = new string []{ "Линия", "Прямоугольник", "Квадрат", "Ромб", "Окружность", "Эллипс" };
+                figureColorsLan = new string[] { "Чёрный", "Красный", "Оранжевый", "Желтый", "Зеленый", "Синий", "Фиолетовый", "Серый" };
             }
-                
+
 
             List<FigureButtonInfo> figureButtonInfoArr = new List<FigureButtonInfo>();
+            List<FigureColorInfo> figureColorInfoArr = new List<FigureColorInfo>();
 
-    
+            
             foreach (var Creator in figureCreatorList.Creators)
             {
                 int i = -1;
@@ -87,15 +140,15 @@ namespace Paint
                     i++;
                     if ((Creator).ToString().Contains(FigureName))
                     {
-                        
-                        if (butLanguage == "English")
-                            figureButtonInfoArr.Add(new FigureButtonInfo {
+                        if (language == "English")
+                            figureButtonInfoArr.Add(new FigureButtonInfo
+                            {
                                 figureName = FigureName,
                                 creator = Creator
                             });
-                        else if (butLanguage == "Russian")
+                        else if (language == "Russian")
                         {
-                            string name = figureNamesRus[i];
+                            string name = figureNamesLan[i];
                             figureButtonInfoArr.Add(new FigureButtonInfo
                             {
                                 figureName = name,
@@ -103,21 +156,37 @@ namespace Paint
                             });
                         }
                     }
-                }   
+                }
             }
 
-            FigureColorInfo[] figureColorInfoArr = new FigureColorInfo[]
+            foreach (var Color in colorList)
             {
-                new FigureColorInfo { colorName = "Black", color = Color.Black  },
-                new FigureColorInfo { colorName = "Red", color = Color.Red },
-                new FigureColorInfo { colorName = "Orange", color = Color.Orange },
-                new FigureColorInfo { colorName = "Yellow", color = Color.Yellow },
-                new FigureColorInfo { colorName = "Green", color = Color.Green },
-                new FigureColorInfo { colorName = "Blue", color = Color.Blue },
-                new FigureColorInfo { colorName = "Purple", color = Color.Purple },
-                new FigureColorInfo { colorName = "Gray", color = Color.Gray },
-            };
-               
+                int i = -1;
+                foreach (var ColorName in figureColors)
+                {
+                    i++;
+                    if ((Color).ToString().Contains(ColorName))
+                    {
+                        if (language == "English")
+                            figureColorInfoArr.Add(new FigureColorInfo
+                            {
+                                colorName = ColorName,
+                                color = Color
+                            });
+                        else if (language == "Russian")
+                        {
+                            string name = figureColorsLan[i];
+                            figureColorInfoArr.Add(new FigureColorInfo
+                            {
+                                colorName = name,
+                                color = Color
+                            });
+                        }
+                    }
+                }
+            }
+
+
             FigureWidthInfo[] figureWidthInfoArr = new FigureWidthInfo[]
             {
                 new FigureWidthInfo { widthValue = "1", width = 1 },
@@ -172,9 +241,9 @@ namespace Paint
 
             Button button;
             X = 700;
-            Y = 150; 
+            Y = 150;
             foreach (var figureInfo in figureButtonInfoArr)
-            {  
+            {
                 button = new Button();
                 button.Text = figureInfo.figureName;
                 button.Tag = figureInfo.creator;
@@ -186,7 +255,18 @@ namespace Paint
                 button.UseVisualStyleBackColor = true;
                 Controls.Add(button);
             }
-        }
+
+            if (language == "English")
+            {
+                SerializeBtn.Text = "Serialize";
+                DeserializeBtn.Text = "Deserialize";
+            }
+            else if (language == "Russian")
+            {
+                SerializeBtn.Text = "Сериализовать";
+                DeserializeBtn.Text = "Десериализовать";
+            }
+        } 
 
         // events
         private void FigureWidth_ChechedChange(object sender, EventArgs e)
