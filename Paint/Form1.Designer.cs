@@ -33,6 +33,10 @@
             this.CleanBtn = new System.Windows.Forms.Button();
             this.SerializeBtn = new System.Windows.Forms.Button();
             this.DeserializeBtn = new System.Windows.Forms.Button();
+            this.LanguageBox = new System.Windows.Forms.ComboBox();
+            this.PenWidthBox = new System.Windows.Forms.ComboBox();
+            this.CanvasClrBox = new System.Windows.Forms.ComboBox();
+            this.ConfigBtn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -91,11 +95,70 @@
             this.DeserializeBtn.UseVisualStyleBackColor = true;
             this.DeserializeBtn.Click += new System.EventHandler(this.DeserializeBtn_Click);
             // 
+            // LanguageBox
+            // 
+            this.LanguageBox.FormattingEnabled = true;
+            this.LanguageBox.Items.AddRange(new object[] {
+            "English",
+            "Русский"});
+            this.LanguageBox.Location = new System.Drawing.Point(1544, 129);
+            this.LanguageBox.Name = "LanguageBox";
+            this.LanguageBox.Size = new System.Drawing.Size(206, 24);
+            this.LanguageBox.TabIndex = 6;
+            this.LanguageBox.Text = "Language";
+            //this.LanguageBox.SelectedIndexChanged += new System.EventHandler(this.LanguageBox_SelectedIndexChanged);
+            // 
+            // PenWidthBox
+            // 
+            this.PenWidthBox.FormattingEnabled = true;
+            this.PenWidthBox.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"});
+            this.PenWidthBox.Location = new System.Drawing.Point(1544, 249);
+            this.PenWidthBox.Name = "PenWidthBox";
+            this.PenWidthBox.Size = new System.Drawing.Size(206, 24);
+            this.PenWidthBox.TabIndex = 7;
+            this.PenWidthBox.Text = "Pen width";
+            // 
+            // CanvasClrBox
+            // 
+            this.CanvasClrBox.FormattingEnabled = true;
+            this.CanvasClrBox.Items.AddRange(new object[] {
+            "Black",
+            "Red",
+            "Yellow",
+            "Green",
+            "Blue",
+            "Purple",
+            "Gray"});
+            this.CanvasClrBox.Location = new System.Drawing.Point(1544, 377);
+            this.CanvasClrBox.Name = "CanvasClrBox";
+            this.CanvasClrBox.Size = new System.Drawing.Size(206, 24);
+            this.CanvasClrBox.TabIndex = 8;
+            this.CanvasClrBox.Text = "Canvas color";
+            // 
+            // ConfigBtn
+            // 
+            this.ConfigBtn.Location = new System.Drawing.Point(1590, 513);
+            this.ConfigBtn.Name = "ConfigBtn";
+            this.ConfigBtn.Size = new System.Drawing.Size(116, 36);
+            this.ConfigBtn.TabIndex = 9;
+            this.ConfigBtn.Text = "Config";
+            this.ConfigBtn.UseVisualStyleBackColor = true;
+            this.ConfigBtn.Click += new System.EventHandler(this.ConfigBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1252, 855);
+            this.ClientSize = new System.Drawing.Size(1884, 855);
+            this.Controls.Add(this.ConfigBtn);
+            this.Controls.Add(this.CanvasClrBox);
+            this.Controls.Add(this.PenWidthBox);
+            this.Controls.Add(this.LanguageBox);
             this.Controls.Add(this.DeserializeBtn);
             this.Controls.Add(this.SerializeBtn);
             this.Controls.Add(this.CleanBtn);
@@ -115,6 +178,10 @@
         private System.Windows.Forms.Button CleanBtn;
         private System.Windows.Forms.Button SerializeBtn;
         private System.Windows.Forms.Button DeserializeBtn;
+        private System.Windows.Forms.ComboBox LanguageBox;
+        private System.Windows.Forms.ComboBox PenWidthBox;
+        private System.Windows.Forms.ComboBox CanvasClrBox;
+        private System.Windows.Forms.Button ConfigBtn;
     }
 }
 

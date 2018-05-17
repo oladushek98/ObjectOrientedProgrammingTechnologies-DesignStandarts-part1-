@@ -18,9 +18,12 @@ namespace Paint
         Figure figure;
 
         XDocument xDoc = XDocument.Load("../../config.xml");
+        XElement root = XDocument.Load("../../config.xml").Element("config");
 
         Color penColor;
         float penWidth;
+
+        const string Eng = "English";
 
         Point X, Y;
 
@@ -33,7 +36,7 @@ namespace Paint
 
         List<string> languageList = new List<string>()
         {
-            "English", "Russian"
+            "English", "Русский"
         };
 
 
@@ -72,7 +75,7 @@ namespace Paint
             string language = null;
             try
             {
-                foreach(XElement lan in xDoc.Element("config").Elements("language"))
+                foreach(XElement lan in root.Elements("language"))
                 {
                     language = lan.Attribute("lang").Value;
                     bool correct = false;
@@ -85,7 +88,7 @@ namespace Paint
                     }
                     if (correct == false)
                     {
-                        language = "English";
+                        language = Eng;
                     }
                 }
             }
@@ -94,12 +97,27 @@ namespace Paint
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+            // creating of components info arrays
+            string[] figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+            string[] figureNamesLan = null;
+            if (language == "Русский")
+            {
+                figureNamesLan = new string[] { "Линия", "Прямоугольник", "Квадрат", "Ромб", "Окружность", "Эллипс" };
+            }
+
+            string[] figureColors = new string[] { "Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Gray" };
+            string[] figureColorsLan = null;
+            if (language == "Русский")
+            {
+                figureColorsLan = new string[] { "Чёрный", "Красный", "Оранжевый", "Желтый", "Зеленый", "Синий", "Фиолетовый", "Серый" };
+            }
+
 
             // reading info about buttons for figure drawing from .xml file
             int butLength = 0, butWidth = 0;
             try
             {
-                foreach (XElement but in xDoc.Element("config").Elements("button"))
+                foreach (XElement but in root.Elements("button"))
                 {
                     XElement sizeL = but.Element("length");
                     butLength = Int32.Parse(sizeL.Value);
@@ -117,7 +135,7 @@ namespace Paint
             string col = null;
             try
             {
-                foreach(XElement pen in xDoc.Element("config").Elements("pen"))
+                foreach(XElement pen in root.Elements("pen"))
                 {
                     penWidth = float.Parse(pen.Element("width").Value);
                     Width = pen.Element("width").Value;
@@ -129,20 +147,41 @@ namespace Paint
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            // creating of components info arrays
-            string[] figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
-            string[] figureNamesLan = null;
-            if (language == "Russian")
+          
+            Color backColor = Color.White;
+            string backClr = null;
+            try
             {
-                figureNamesLan = new string[] { "Линия", "Прямоугольник", "Квадрат", "Ромб", "Окружность", "Эллипс" };
+                foreach (XElement canvclr in root.Elements("canvas"))
+                {
+                    backClr = canvclr.Attribute("color").Value;
+                    bool correct = false;
+                    for (int i = 0; i < figureColors.Length; i++)
+                    {
+                        if (backClr == figureColors[i])
+                        {
+                            correct = true;
+                        }
+                    }
+                    if (correct == false)
+                    {
+                        backClr = "White";
+                    }
+                    foreach(var clr in colorList)
+                    {
+                        if ((clr).ToString().Contains(backClr))
+                        {
+                            backColor = clr;
+                        }
+                    }
+                    pictureBox1.BackColor = backColor;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-            string[] figureColors = new string[] { "Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Gray" };
-            string[] figureColorsLan = null;
-            if (language == "Russian")
-            {
-                figureColorsLan = new string[] { "Чёрный", "Красный", "Оранжевый", "Желтый", "Зеленый", "Синий", "Фиолетовый", "Серый" };
-            }
 
 
             List<FigureButtonInfo> figureButtonInfoArr = new List<FigureButtonInfo>();
@@ -157,13 +196,13 @@ namespace Paint
                     i++;
                     if ((Creator).ToString().Contains(FigureName))
                     {
-                        if (language == "English")
+                        if (language == Eng)
                             figureButtonInfoArr.Add(new FigureButtonInfo
                             {
                                 figureName = FigureName,
                                 creator = Creator
                             });
-                        else if (language == "Russian")
+                        else 
                         {
                             string name = figureNamesLan[i];
                             figureButtonInfoArr.Add(new FigureButtonInfo
@@ -184,13 +223,15 @@ namespace Paint
                     i++;
                     if ((Color).ToString().Contains(ColorName))
                     {
-                        if (language == "English")
+                        if (language == Eng)
+                        {
                             figureColorInfoArr.Add(new FigureColorInfo
                             {
                                 colorName = ColorName,
                                 color = Color
                             });
-                        else if (language == "Russian")
+                         }
+                        else 
                         {
                             string name = figureColorsLan[i];
                             figureColorInfoArr.Add(new FigureColorInfo
@@ -212,7 +253,6 @@ namespace Paint
                 new FigureWidthInfo { widthValue = "4", width = 4 },
                 new FigureWidthInfo { widthValue = "5", width = 5 }
             };
-
 
             //components creating
             int X = 900;
@@ -243,11 +283,12 @@ namespace Paint
                 radioButton = new RadioButton();
                 radioButton.Name = colorInfo.colorName;
                 radioButton.Text = colorInfo.colorName;
-                if (radioButton.Name == col)
+                if ((language != Eng && radioButton.Name == figureColorsLan[Array.IndexOf(figureColors, col)]) 
+                    || radioButton.Name == col)
                 {
                     radioButton.Checked = true;
                     penColor = (Color)colorInfo.color;
-                }
+                }                
                 radioButton.CheckedChanged += new EventHandler(FigureColor_CheckedChange);
                 radioButton.Location = new Point(X, Y);
                 radioButton.AutoSize = true;
@@ -274,15 +315,24 @@ namespace Paint
                 Controls.Add(button);
             }
 
-            if (language == "English")
+            if (language == Eng)
             {
                 SerializeBtn.Text = "Serialize";
                 DeserializeBtn.Text = "Deserialize";
+                ConfigBtn.Text = "Config";
+                LanguageBox.Text = "Language";
+                PenWidthBox.Text = "Ren width";
+                CanvasClrBox.Text = "Canvas color";
             }
-            else if (language == "Russian")
+            else if (language == "Русский")
             {
                 SerializeBtn.Text = "Сериализовать";
                 DeserializeBtn.Text = "Десериализовать";
+                ConfigBtn.Text = "Конфигурировать";
+                LanguageBox.Text = "Язык";
+                PenWidthBox.Text = "Ширина пера";
+                CanvasClrBox.Text = "Цвет полотна";
+
             }
         } 
 
@@ -371,6 +421,22 @@ namespace Paint
             pictureBox1.Invalidate();
             figure = null;
         }
+
+
+        private void ConfigBtn_Click(object sender, EventArgs e)
+        {
+            XElement root = xDoc.Element("config");
+
+            foreach (XElement elem in root.Elements("language"))
+                elem.Attribute("lang").Value = LanguageBox.SelectedItem.ToString();
+
+            xDoc.Save("../../config.xml");
+
+            Init();
+        }
+
+
+
 
         // .dll plugins adding
         public void AddPlugins()
