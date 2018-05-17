@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <language lang ="English"></language>
+  <language lang ="Russian"></language>
   <button>
      <length>80</length>
      <width>23</width>
   </button>
   <pen>
-    <width>3</width>
-    <color>Black</color>
+    <width>4</width>
+    <color>Зеленый</color>
   </pen>
 </config>

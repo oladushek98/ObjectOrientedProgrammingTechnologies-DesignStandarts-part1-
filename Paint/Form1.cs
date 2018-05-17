@@ -19,8 +19,8 @@ namespace Paint
 
         XDocument xDoc = XDocument.Load("../../config.xml");
 
-        Color penColor = Color.Black;
-        float width = 3;
+        Color penColor;
+        float penWidth;
 
         Point X, Y;
 
@@ -105,6 +105,23 @@ namespace Paint
                     butLength = Int32.Parse(sizeL.Value);
                     XElement sizeW = but.Element("width");
                     butWidth = Int32.Parse(sizeW.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            
+            string Width = null;
+            string col = null;
+            try
+            {
+                foreach(XElement pen in xDoc.Element("config").Elements("pen"))
+                {
+                    penWidth = float.Parse(pen.Element("width").Value);
+                    Width = pen.Element("width").Value;
+                    col = pen.Element("color").Value;
                 }
             }
             catch (Exception ex)
@@ -206,7 +223,7 @@ namespace Paint
                 radioButton1 = new RadioButton();
                 radioButton1.Name = widthInfo.widthValue;
                 radioButton1.Text = widthInfo.widthValue;
-                if (radioButton1.Name == "3")
+                if (radioButton1.Name == Width)
                 {
                     radioButton1.Checked = true;
                 }
@@ -226,9 +243,10 @@ namespace Paint
                 radioButton = new RadioButton();
                 radioButton.Name = colorInfo.colorName;
                 radioButton.Text = colorInfo.colorName;
-                if (radioButton.Name == "Black")
+                if (radioButton.Name == col)
                 {
                     radioButton.Checked = true;
+                    penColor = (Color)colorInfo.color;
                 }
                 radioButton.CheckedChanged += new EventHandler(FigureColor_CheckedChange);
                 radioButton.Location = new Point(X, Y);
@@ -272,7 +290,7 @@ namespace Paint
         private void FigureWidth_ChechedChange(object sender, EventArgs e)
         {
             RadioButton checkedItem = (RadioButton)sender;
-            width = (float)checkedItem.Tag;
+            penWidth = (float)checkedItem.Tag;
         }
 
         private void FigureColor_CheckedChange(object sender, EventArgs e)
@@ -292,7 +310,7 @@ namespace Paint
             if (figureCreator != null)
             {
                 figure = figureCreator.Create();
-                figure.Pen = new Pen(penColor, width);
+                figure.Pen = new Pen(penColor, penWidth);
                 isClicked = true;
                 X = new Point(e.X, e.Y);
             }
