@@ -51,16 +51,18 @@
             // 
             // AllFigures
             // 
-            this.AllFigures.Location = new System.Drawing.Point(941, 679);
+            this.AllFigures.Enabled = false;
+            this.AllFigures.Location = new System.Drawing.Point(1144, 719);
             this.AllFigures.Name = "AllFigures";
             this.AllFigures.Size = new System.Drawing.Size(96, 35);
             this.AllFigures.TabIndex = 2;
             this.AllFigures.Text = "All figures";
             this.AllFigures.UseVisualStyleBackColor = true;
+            this.AllFigures.Visible = false;
             // 
             // CleanBtn
             // 
-            this.CleanBtn.Location = new System.Drawing.Point(940, 740);
+            this.CleanBtn.Location = new System.Drawing.Point(1144, 760);
             this.CleanBtn.Name = "CleanBtn";
             this.CleanBtn.Size = new System.Drawing.Size(96, 36);
             this.CleanBtn.TabIndex = 3;
@@ -71,7 +73,7 @@
             // 
             // SerializeBtn
             // 
-            this.SerializeBtn.Location = new System.Drawing.Point(886, 820);
+            this.SerializeBtn.Location = new System.Drawing.Point(925, 664);
             this.SerializeBtn.Name = "SerializeBtn";
             this.SerializeBtn.Size = new System.Drawing.Size(75, 23);
             this.SerializeBtn.TabIndex = 4;
@@ -81,7 +83,7 @@
             // 
             // DeserializeBtn
             // 
-            this.DeserializeBtn.Location = new System.Drawing.Point(976, 820);
+            this.DeserializeBtn.Location = new System.Drawing.Point(1043, 664);
             this.DeserializeBtn.Name = "DeserializeBtn";
             this.DeserializeBtn.Size = new System.Drawing.Size(98, 23);
             this.DeserializeBtn.TabIndex = 5;

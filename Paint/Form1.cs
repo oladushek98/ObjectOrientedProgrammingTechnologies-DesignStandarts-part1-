@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using AbstractClassLibrary;
 using System.Reflection;
 using System.IO;
+using System.Xml.Linq;
 
 namespace Paint
 {
@@ -15,6 +16,8 @@ namespace Paint
         FigureCreatorList figureCreatorList = new FigureCreatorList();
         ICreator figureCreator;
         Figure figure;
+
+        XDocument xDoc = XDocument.Load("../../config.xml");
 
         Color penColor = Color.Black;
         float width = 3;
@@ -46,31 +49,61 @@ namespace Paint
             InitializeComponent();
 
             AddPlugins();
-            string[] figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+
+            // reading info about buttons for figure drawing from .xml file
+            int butLength = 0, butWidth = 0;
+            string butLanguage = "";
+            foreach (XElement but in xDoc.Element("config").Elements("button"))
+            {
+                XElement sizeL = but.Element("length");
+                butLength = Int32.Parse(sizeL.Value);
+                XElement sizeW = but.Element("width");
+                butWidth = Int32.Parse(sizeW.Value);
+                butLanguage = but.Element("language").Value;
+            }
+
+            // creating of components info arrays
+            string[] figureNames = null;
+            string[] figureNamesRus = null;
+            if (butLanguage == "English")
+            {
+                figureNames = new string []{ "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+            }
+            else if (butLanguage == "Russian")
+            {
+                figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+                figureNamesRus = new string []{ "Линия", "Прямоугольник", "Квадрат", "Ромб", "Окружность", "Эллипс" };
+            }
+                
+
             List<FigureButtonInfo> figureButtonInfoArr = new List<FigureButtonInfo>();
 
-           /* FigureButtonInfo[] figureButtonInfoArr = new FigureButtonInfo[]
-            {
-                new FigureButtonInfo { figureName = "Line", creator = new Line_Creator() },
-                new FigureButtonInfo { figureName = "Circle", creator = new Circle_Creator() },
-                new FigureButtonInfo { figureName = "Ellipse", creator = new Ellipse_Creator() },
-                new FigureButtonInfo { figureName = "Rectangle", creator = new Rectangle_Creator() },
-                new FigureButtonInfo { figureName = "Rhombus", creator = new Rhombus_Creator() },
-                new FigureButtonInfo { figureName = "Square", creator = new Square_Creator() }
-            };*/
-
+    
             foreach (var Creator in figureCreatorList.Creators)
             {
-                foreach(var FigureName in figureNames)
+                int i = -1;
+                foreach (var FigureName in figureNames)
                 {
+                    i++;
                     if ((Creator).ToString().Contains(FigureName))
                     {
-                        figureButtonInfoArr.Add(new FigureButtonInfo{
-                            figureName = FigureName,
-                            creator = Creator
-                        });
+                        
+                        if (butLanguage == "English")
+                            figureButtonInfoArr.Add(new FigureButtonInfo {
+                                figureName = FigureName,
+                                creator = Creator
+                            });
+                        else if (butLanguage == "Russian")
+                        {
+                            string name = figureNamesRus[i];
+                            figureButtonInfoArr.Add(new FigureButtonInfo
+                            {
+                                figureName = name,
+                                creator = Creator
+                            });
+                        }
                     }
-                }
+                }   
             }
 
             FigureColorInfo[] figureColorInfoArr = new FigureColorInfo[]
@@ -95,6 +128,7 @@ namespace Paint
             };
 
 
+            //components creating
             int X = 900;
             int Y = 150;
             RadioButton radioButton, radioButton1;
@@ -138,9 +172,9 @@ namespace Paint
 
             Button button;
             X = 700;
-            Y = 150;
+            Y = 150; 
             foreach (var figureInfo in figureButtonInfoArr)
-            {
+            {  
                 button = new Button();
                 button.Text = figureInfo.figureName;
                 button.Tag = figureInfo.creator;
@@ -148,12 +182,13 @@ namespace Paint
                 button.Location = new Point(X, Y);
                 Y += 50;
                 button.Name = figureInfo.figureName;
-                button.Size = new Size(75, 23);
+                button.Size = new Size(butLength, butWidth);
                 button.UseVisualStyleBackColor = true;
                 Controls.Add(button);
             }
         }
 
+        // events
         private void FigureWidth_ChechedChange(object sender, EventArgs e)
         {
             RadioButton checkedItem = (RadioButton)sender;
@@ -239,47 +274,14 @@ namespace Paint
             figure = null;
         }
 
-        //private void AllFigures_Click(object sender, EventArgs e)
-        //{
-        //    Graphics graphics = pictureBox1.CreateGraphics();
-        //    FigureList FigureList = new FigureList();
-        //    int startX = 80;
-        //    int startY = 20;
-        //    int finishX = 160;
-        //    int finishY = startY + 60;
-
-        //    foreach (var fig in FigureList.Figures)
-        //    {
-        //        Figure figure = fig;
-        //        var pen = new Pen(penColor, width);
-        //        fig.StartPoint = new Point(startX, startY);
-        //        fig.FinishPoint = new Point(finishX, finishY);
-        //        figure.Draw(graphics, pen, fig.StartPoint, fig.FinishPoint);
-        //        startY += 100;
-        //        finishY = startY + 50;
-
-        //        if (figure != null)
-        //            FigureList.ReadyFigures.Add(figure);
-
-        //        if (FigureList.ReadyFigures.Count > 0)
-        //        {
-        //            foreach (var readyfig in FigureList.ReadyFigures)
-        //            {
-        //                readyfig.Draw(graphics, pen, readyfig.StartPoint, readyfig.FinishPoint);
-        //            }
-        //        }
-        //    }
-        //}
-
+        // .dll plugins adding
         public void AddPlugins()
         {
-            // Находим каталог, содержащий файл Host.exe      
-            String AddInDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            // Предполагается, что сборки подключаемых модулей       
-            // находятся в одном каталоге с EXE-файлом хоста       
+            // find a directory of .exe file      
+            string AddInDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            // .dll files are to be located in the same directory as .exe is  
             var AddInAssemblies = Directory.EnumerateFiles(AddInDir, "*Library.dll");
-            // Создание набора объектов Type, которые могут       
-            // использоваться хостом  
+            // types creating
 
             foreach (var ass in AddInAssemblies)
             {
