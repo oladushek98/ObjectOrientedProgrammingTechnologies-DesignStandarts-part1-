@@ -24,10 +24,14 @@ namespace Paint
         float penWidth;
 
         const string Eng = "English";
+        string language = null;
 
         Point X, Y;
 
         public bool isClicked = false;
+
+        string[] figureNames = null, figureNamesLan = null;
+        string[] figureColors = null, figureColorsLan = null;
 
         List<Color> colorList = new List<Color>()
         {
@@ -72,7 +76,7 @@ namespace Paint
         {
 
             // reading the language of the program interface
-            string language = null;
+            language = null;
             try
             {
                 foreach(XElement lan in root.Elements("language"))
@@ -98,15 +102,13 @@ namespace Paint
             }
 
             // creating of components info arrays
-            string[] figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
-            string[] figureNamesLan = null;
+            figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
             if (language == "Русский")
             {
                 figureNamesLan = new string[] { "Линия", "Прямоугольник", "Квадрат", "Ромб", "Окружность", "Эллипс" };
             }
 
-            string[] figureColors = new string[] { "Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Gray" };
-            string[] figureColorsLan = null;
+            figureColors = new string[] { "Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Gray" };
             if (language == "Русский")
             {
                 figureColorsLan = new string[] { "Чёрный", "Красный", "Оранжевый", "Желтый", "Зеленый", "Синий", "Фиолетовый", "Серый" };
@@ -323,6 +325,7 @@ namespace Paint
                 LanguageBox.Text = "Language";
                 PenWidthBox.Text = "Ren width";
                 CanvasClrBox.Text = "Canvas color";
+                PenColorBox.Text = "Pen color";
             }
             else if (language == "Русский")
             {
@@ -332,7 +335,44 @@ namespace Paint
                 LanguageBox.Text = "Язык";
                 PenWidthBox.Text = "Ширина пера";
                 CanvasClrBox.Text = "Цвет полотна";
+                PenColorBox.Text = "Цвет пера";
 
+            }
+
+            for (int i = 0; i < figureColors.Length; i++)
+            {
+                if (language == Eng)
+                {
+                    CanvasClrBox.Items[i] = figureColors[i];
+                }
+                else
+                {
+                    CanvasClrBox.Items[i] = figureColorsLan[i];
+                }
+            }
+
+            for (int i = 0; i < figureColors.Length; i++)
+            {
+                if (language == Eng)
+                {
+                    PenColorBox.Items[i] = figureColors[i];
+                }
+                else
+                {
+                    PenColorBox.Items[i] = figureColorsLan[i];
+                }
+            }
+
+            for (int i = 0; i < figureColors.Length; i++)
+            {
+                if (language == Eng)
+                {
+                    CanvasClrBox.Items[i] = figureColors[i];
+                }
+                else
+                {
+                    CanvasClrBox.Items[i] = figureColorsLan[i];
+                }
             }
         } 
 
@@ -428,11 +468,43 @@ namespace Paint
             XElement root = xDoc.Element("config");
 
             foreach (XElement elem in root.Elements("language"))
-                elem.Attribute("lang").Value = LanguageBox.SelectedItem.ToString();
+            {
+                if (LanguageBox.SelectedItem != null)
+                    elem.Attribute("lang").Value = LanguageBox.SelectedItem.ToString();
+            }
+
+            foreach (XElement elem in root.Elements("pen"))
+            {
+                if (PenWidthBox.SelectedItem != null)
+                    elem.Element("width").Value = PenWidthBox.SelectedItem.ToString();
+                if (PenColorBox.SelectedItem != null)
+                {
+                    if (language == Eng)
+                        elem.Element("color").Value = PenColorBox.SelectedItem.ToString();
+                    else
+                        elem.Element("color").Value = figureColors[Array.IndexOf(figureColorsLan, PenColorBox.SelectedItem.ToString())];
+                }
+            }
+
+            foreach (XElement elem in root.Elements("canvas"))
+            {
+                if (CanvasClrBox.SelectedItem != null)
+                {
+                    if (language == Eng)
+                        elem.Attribute("color").Value = CanvasClrBox.SelectedItem.ToString();
+                    else
+                        elem.Attribute("color").Value = figureColors[Array.IndexOf(figureColorsLan, CanvasClrBox.SelectedItem.ToString())];
+                }
+            }
+
+            if ((LanguageBox.SelectedItem == null) && (PenWidthBox.SelectedItem == null) && (CanvasClrBox.SelectedItem == null) && (PenColorBox.SelectedItem == null))
+                MessageBox.Show("Nothing to config is chosen!");
+            else
+                MessageBox.Show("Refresh the application for configuration settings to be activated");
 
             xDoc.Save("../../config.xml");
 
-            Init();
+            //Init();
         }
 
 

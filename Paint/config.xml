@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <language lang="Русский"></language>
+  <language lang="English"></language>
   <button>
     <length>80</length>
     <width>23</width>
   </button>
   <pen>
     <width>4</width>
-    <color>Green</color>
+    <color>Yellow</color>
   </pen>
-  <canvas color="White" />
+  <canvas color="Red" />
 </config>

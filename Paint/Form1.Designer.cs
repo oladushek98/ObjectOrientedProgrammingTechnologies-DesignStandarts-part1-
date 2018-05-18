@@ -37,6 +37,7 @@
             this.PenWidthBox = new System.Windows.Forms.ComboBox();
             this.CanvasClrBox = new System.Windows.Forms.ComboBox();
             this.ConfigBtn = new System.Windows.Forms.Button();
+            this.PenColorBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,7 +107,6 @@
             this.LanguageBox.Size = new System.Drawing.Size(206, 24);
             this.LanguageBox.TabIndex = 6;
             this.LanguageBox.Text = "Language";
-            //this.LanguageBox.SelectedIndexChanged += new System.EventHandler(this.LanguageBox_SelectedIndexChanged);
             // 
             // PenWidthBox
             // 
@@ -117,7 +117,7 @@
             "3",
             "4",
             "5"});
-            this.PenWidthBox.Location = new System.Drawing.Point(1544, 249);
+            this.PenWidthBox.Location = new System.Drawing.Point(1544, 381);
             this.PenWidthBox.Name = "PenWidthBox";
             this.PenWidthBox.Size = new System.Drawing.Size(206, 24);
             this.PenWidthBox.TabIndex = 7;
@@ -129,12 +129,13 @@
             this.CanvasClrBox.Items.AddRange(new object[] {
             "Black",
             "Red",
+            "Orange",
             "Yellow",
             "Green",
             "Blue",
             "Purple",
             "Gray"});
-            this.CanvasClrBox.Location = new System.Drawing.Point(1544, 377);
+            this.CanvasClrBox.Location = new System.Drawing.Point(1544, 511);
             this.CanvasClrBox.Name = "CanvasClrBox";
             this.CanvasClrBox.Size = new System.Drawing.Size(206, 24);
             this.CanvasClrBox.TabIndex = 8;
@@ -142,7 +143,7 @@
             // 
             // ConfigBtn
             // 
-            this.ConfigBtn.Location = new System.Drawing.Point(1590, 513);
+            this.ConfigBtn.Location = new System.Drawing.Point(1586, 640);
             this.ConfigBtn.Name = "ConfigBtn";
             this.ConfigBtn.Size = new System.Drawing.Size(116, 36);
             this.ConfigBtn.TabIndex = 9;
@@ -150,11 +151,30 @@
             this.ConfigBtn.UseVisualStyleBackColor = true;
             this.ConfigBtn.Click += new System.EventHandler(this.ConfigBtn_Click);
             // 
+            // PenColorBox
+            // 
+            this.PenColorBox.FormattingEnabled = true;
+            this.PenColorBox.Items.AddRange(new object[] {
+            "Black",
+            "Red",
+            "Orange",
+            "Yellow",
+            "Green",
+            "Blue",
+            "Purple",
+            "Gray"});
+            this.PenColorBox.Location = new System.Drawing.Point(1544, 247);
+            this.PenColorBox.Name = "PenColorBox";
+            this.PenColorBox.Size = new System.Drawing.Size(206, 24);
+            this.PenColorBox.TabIndex = 10;
+            this.PenColorBox.Text = "Pen color";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1884, 855);
+            this.Controls.Add(this.PenColorBox);
             this.Controls.Add(this.ConfigBtn);
             this.Controls.Add(this.CanvasClrBox);
             this.Controls.Add(this.PenWidthBox);
@@ -182,6 +202,7 @@
         private System.Windows.Forms.ComboBox PenWidthBox;
         private System.Windows.Forms.ComboBox CanvasClrBox;
         private System.Windows.Forms.Button ConfigBtn;
+        private System.Windows.Forms.ComboBox PenColorBox;
     }
 }
 
