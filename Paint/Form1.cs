@@ -339,42 +339,25 @@ namespace Paint
 
             }
 
-            for (int i = 0; i < figureColors.Length; i++)
-            {
-                if (language == Eng)
-                {
-                    CanvasClrBox.Items[i] = figureColors[i];
-                }
-                else
-                {
-                    CanvasClrBox.Items[i] = figureColorsLan[i];
-                }
-            }
+            InsertBoxItems(CanvasClrBox);
+            InsertBoxItems(PenColorBox);
 
-            for (int i = 0; i < figureColors.Length; i++)
-            {
-                if (language == Eng)
-                {
-                    PenColorBox.Items[i] = figureColors[i];
-                }
-                else
-                {
-                    PenColorBox.Items[i] = figureColorsLan[i];
-                }
-            }
-
-            for (int i = 0; i < figureColors.Length; i++)
-            {
-                if (language == Eng)
-                {
-                    CanvasClrBox.Items[i] = figureColors[i];
-                }
-                else
-                {
-                    CanvasClrBox.Items[i] = figureColorsLan[i];
-                }
-            }
         } 
+
+        private void InsertBoxItems(ComboBox box)
+        {
+            for (int i = 0; i < figureColors.Length; i++)
+            {
+                if (language == Eng)
+                {
+                    box.Items[i] = figureColors[i];
+                }
+                else
+                {
+                    box.Items[i] = figureColorsLan[i];
+                }
+            }
+        }
 
         // events
         private void FigureWidth_ChechedChange(object sender, EventArgs e)
@@ -498,9 +481,21 @@ namespace Paint
             }
 
             if ((LanguageBox.SelectedItem == null) && (PenWidthBox.SelectedItem == null) && (CanvasClrBox.SelectedItem == null) && (PenColorBox.SelectedItem == null))
-                MessageBox.Show("Nothing to config is chosen!");
+            {
+                foreach (XElement elem in root.Elements("pen"))
+                {
+                    elem.Element("width").Value = penWidth.ToString();
+                    elem.Element("color").Value = penColor.ToString().Remove(0, 7).Remove(penColor.ToString().Remove(0, 7).IndexOf(']'));
+                    string kek = elem.Element("color").Value;
+                }
+                foreach(XElement elem in root.Elements("canvas"))
+                {
+                    elem.Attribute("color").Value = pictureBox1.BackColor.ToString().Remove(0, 7).Remove(pictureBox1.BackColor.ToString().Remove(0, 7).IndexOf(']'));
+                }
+                MessageBox.Show("Current configuration saved. Restart the application to activate it!");
+            }
             else
-                MessageBox.Show("Refresh the application for configuration settings to be activated");
+                MessageBox.Show("Restart the application for configuration settings to be activated");
 
             xDoc.Save("../../config.xml");
 

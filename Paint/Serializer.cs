@@ -15,22 +15,35 @@ namespace Paint
 {
     class Serializer
     {
-        string fileName = "figures.txt";
+        OpenFileDialog openDialog = new OpenFileDialog();
+        SaveFileDialog saveDialog = new SaveFileDialog();
+        string fileName = null;
         readonly JsonSerializerSettings settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
         public void Serialize(List<Figure> list)
         {
-            using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate | FileMode.Truncate))
+            try
             {
-                var json = JsonConvert.SerializeObject(list, Formatting.None, settings);
-                var writeStream = new StreamWriter(fs);
-                writeStream.Write(json);
-                writeStream.Flush();
+                saveDialog.ShowDialog();
+                string fileName = saveDialog.FileName;
+                using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate | FileMode.Truncate))
+                {
+                    var json = JsonConvert.SerializeObject(list, Formatting.None, settings);
+                    var writeStream = new StreamWriter(fs);
+                    writeStream.Write(json);
+                    writeStream.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         public void Deserialize(List<Figure> list)
         {
             list.Clear();
+            openDialog.ShowDialog();
+            fileName =  openDialog.FileName;
             try
             {
                 using (var fStream = File.OpenRead(fileName))
@@ -42,16 +55,16 @@ namespace Paint
                         foreach (var figure in figures)
                             list.Add(figure);
                     }
-                    catch (JsonReaderException)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Deserialization error! Check the file content!", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         list.Clear();
                     }
                 }
             }
-            catch (FileNotFoundException)
+            catch (Exception ex)
             {
-                MessageBox.Show("File not found", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

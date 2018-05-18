@@ -173,7 +173,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1884, 855);
+            this.ClientSize = new System.Drawing.Size(2500, 855);
             this.Controls.Add(this.PenColorBox);
             this.Controls.Add(this.ConfigBtn);
             this.Controls.Add(this.CanvasClrBox);
