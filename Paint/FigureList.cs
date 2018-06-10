@@ -5,7 +5,7 @@ using AbstractClassLibrary;
 
 namespace Paint
 {
-     class FigureList
+    public  class FigureList
     {
         public List<Figure> ReadyFigures = new List<Figure>
         {

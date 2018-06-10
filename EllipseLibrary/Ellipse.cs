@@ -13,5 +13,10 @@ namespace EllipseLibrary
             int Width = FinishPoint.X - StartPoint.X;
             graphics.DrawEllipse(pen, StartPoint.X, StartPoint.Y, Width, Height);
         }
+
+        public override object Clone()
+        {
+            return (Ellipse)MemberwiseClone();
+        }
     }
 }

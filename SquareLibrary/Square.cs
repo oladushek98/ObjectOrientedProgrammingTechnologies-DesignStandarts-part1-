@@ -32,5 +32,10 @@ namespace SquareLibrary
             }
             graphics.DrawRectangle(pen, StartPoint.X, StartPoint.Y, Width, Width);
         }
+
+        public override object Clone()
+        {
+            return (Square)MemberwiseClone();
+        }
     }
 }

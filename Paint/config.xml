@@ -6,8 +6,8 @@
     <width>23</width>
   </button>
   <pen>
-    <width>4</width>
-    <color>Yellow</color>
+    <width>3</width>
+    <color>Blue</color>
   </pen>
-  <canvas color="Red" />
+  <canvas color="Orange" />
 </config>

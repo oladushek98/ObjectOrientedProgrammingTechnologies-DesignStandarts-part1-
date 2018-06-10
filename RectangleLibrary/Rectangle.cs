@@ -23,5 +23,11 @@ namespace RectangleLibrary
             }
             graphics.DrawRectangle(pen, StartPoint.X, StartPoint.Y, Width, Height);
         }
+
+        public override object Clone()
+        {
+            return (Rectangle)MemberwiseClone();
+        }
     }
 }
+

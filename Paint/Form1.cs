@@ -6,16 +6,19 @@ using AbstractClassLibrary;
 using System.Reflection;
 using System.IO;
 using System.Xml.Linq;
+using System.Collections;
 
 namespace Paint
 {
     public partial class Form1 : Form
     {
 
-        FigureList figureList = new FigureList();
+        public static FigureList figureList = new FigureList();
         FigureCreatorList figureCreatorList = new FigureCreatorList();
+        //List<Figure> userFigureList = null;
         ICreator figureCreator;
-        Figure figure;
+        Figure figure, copiedFigure;
+        UserFigure constUserFigure = new UserFigure();
 
         XDocument xDoc = XDocument.Load("../../config.xml");
         XElement root = XDocument.Load("../../config.xml").Element("config");
@@ -29,13 +32,17 @@ namespace Paint
         Point X, Y;
 
         public bool isClicked = false;
+        public bool isUserFigure = false;
+        public bool isFirstUserFigure = false;
+        public bool IsPastButtonPressed = false;
+        public bool IsFirstPast = false;
 
         string[] figureNames = null, figureNamesLan = null;
         string[] figureColors = null, figureColorsLan = null;
 
         List<Color> colorList = new List<Color>()
         {
-            Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Purple, Color.Gray
+            Color.Black, Color.Red, Color.Orange, Color.Yellow, Color.Green, Color.Blue, Color.Purple, Color.Gray, Color.White
         };
 
         List<string> languageList = new List<string>()
@@ -61,19 +68,27 @@ namespace Paint
             public string widthValue;
             public float width;
         }
+     
 
         public Form1()
         {
             InitializeComponent();
 
-            AddPlugins();
+            AddPlugins();          
 
             Init();
+
+            AddUserFigures();
+
         }
 
 
         private void Init()
         {
+
+            List<FigureButtonInfo> figureButtonInfoArr = new List<FigureButtonInfo>();
+            List<FigureColorInfo> figureColorInfoArr = new List<FigureColorInfo>();
+
 
             // reading the language of the program interface
             language = null;
@@ -82,18 +97,8 @@ namespace Paint
                 foreach(XElement lan in root.Elements("language"))
                 {
                     language = lan.Attribute("lang").Value;
-                    bool correct = false;
-                    foreach(string lang in languageList)
-                    {
-                        if (language == lang)
-                        {
-                            correct = true;
-                        }
-                    }
-                    if (correct == false)
-                    {
+                    if (languageList.IndexOf(language) == -1)
                         language = Eng;
-                    }
                 }
             }
             catch(Exception ex)
@@ -103,15 +108,11 @@ namespace Paint
 
             // creating of components info arrays
             figureNames = new string[] { "Line", "Rectangle", "Square", "Rhombous", "Circle", "Ellipse" };
+            figureColors = new string[] { "Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Gray", "White" };
             if (language == "Русский")
             {
+                figureColorsLan = new string[] { "Чёрный", "Красный", "Оранжевый", "Желтый", "Зеленый", "Синий", "Фиолетовый", "Серый", "Белый" };
                 figureNamesLan = new string[] { "Линия", "Прямоугольник", "Квадрат", "Ромб", "Окружность", "Эллипс" };
-            }
-
-            figureColors = new string[] { "Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple", "Gray" };
-            if (language == "Русский")
-            {
-                figureColorsLan = new string[] { "Чёрный", "Красный", "Оранжевый", "Желтый", "Зеленый", "Синий", "Фиолетовый", "Серый" };
             }
 
 
@@ -130,6 +131,8 @@ namespace Paint
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                butLength = 80;
+                butWidth = 23;
             }
 
             
@@ -140,13 +143,20 @@ namespace Paint
                 foreach(XElement pen in root.Elements("pen"))
                 {
                     penWidth = float.Parse(pen.Element("width").Value);
-                    Width = pen.Element("width").Value;
+                    if (penWidth < 1 || penWidth > 5 || (penWidth - Math.Truncate(penWidth) != 0))
+                        penWidth = 3;
+                    Width = penWidth.ToString();
                     col = pen.Element("color").Value;
+                    if (Array.IndexOf(figureColors, col) == -1)
+                        col = "Black";
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                penWidth = 3;
+                col = "Black";
+                Width = penWidth.ToString();
             }
 
           
@@ -157,18 +167,8 @@ namespace Paint
                 foreach (XElement canvclr in root.Elements("canvas"))
                 {
                     backClr = canvclr.Attribute("color").Value;
-                    bool correct = false;
-                    for (int i = 0; i < figureColors.Length; i++)
-                    {
-                        if (backClr == figureColors[i])
-                        {
-                            correct = true;
-                        }
-                    }
-                    if (correct == false)
-                    {
+                    if (Array.IndexOf(figureColors, backClr) == -1)
                         backClr = "White";
-                    }
                     foreach(var clr in colorList)
                     {
                         if ((clr).ToString().Contains(backClr))
@@ -184,12 +184,8 @@ namespace Paint
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
-
-
-            List<FigureButtonInfo> figureButtonInfoArr = new List<FigureButtonInfo>();
-            List<FigureColorInfo> figureColorInfoArr = new List<FigureColorInfo>();
-
             
+
             foreach (var Creator in figureCreatorList.Creators)
             {
                 int i = -1;
@@ -245,6 +241,8 @@ namespace Paint
                     }
                 }
             }
+
+            
 
 
             FigureWidthInfo[] figureWidthInfoArr = new FigureWidthInfo[]
@@ -342,7 +340,8 @@ namespace Paint
             InsertBoxItems(CanvasClrBox);
             InsertBoxItems(PenColorBox);
 
-        } 
+        }
+
 
         private void InsertBoxItems(ComboBox box)
         {
@@ -357,6 +356,12 @@ namespace Paint
                     box.Items[i] = figureColorsLan[i];
                 }
             }
+        }
+
+
+        private void MakeInfoArr<T>(List<T> fh) where T:new()
+        {
+            T a = new T();
         }
 
         // events
@@ -378,23 +383,58 @@ namespace Paint
             figureCreator = (ICreator)clickedItem.Tag;
         }
 
+        private void UserFigureButton_Click(object sender, EventArgs e)
+        {
+            isUserFigure = true;
+            ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
+            UserFigure tempUserFigure = (UserFigure)clickedItem.Tag;
+            figure = (UserFigure)tempUserFigure.Clone();
+            constUserFigure = (UserFigure)tempUserFigure.Clone();
+            isFirstUserFigure = true;
+        }
+
         private void PictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            if (figureCreator != null)
+            if (isUserFigure /*&& !isFirstUserFigure*/)
             {
-                figure = figureCreator.Create();
-                figure.Pen = new Pen(penColor, penWidth);
+                figure = (UserFigure)constUserFigure.Clone();
                 isClicked = true;
-                X = new Point(e.X, e.Y);
             }
+            else
+            {
+                if (figureCreator != null)
+                {
+                    figure = figureCreator.Create();
+                    figure.Pen = new Pen(penColor, penWidth);
+                    isClicked = true;
+                }
+            }
+            X = new Point(e.X, e.Y);
         }
 
         private void PictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
-            isClicked = false;
+            /*isClicked = false;
             if (figure != null)
             {
                 figureList.ReadyFigures.Add(figure);
+            }*/
+            if (isClicked)
+            {
+                isClicked = false;
+                figure.Add(figureList.ReadyFigures);
+                isFirstUserFigure = false;
+            }
+        }
+
+        private void Repaint(Graphics g)
+        {
+            if (figureList.ReadyFigures.Count > 0)
+            {
+                foreach (var fig in figureList.ReadyFigures)
+                {
+                    fig.Draw(g, fig.Pen, fig.StartPoint, fig.FinishPoint);
+                }
             }
         }
 
@@ -406,13 +446,7 @@ namespace Paint
                 figure.FinishPoint = Y;
                 figure.Draw(e.Graphics, figure.Pen, figure.StartPoint, figure.FinishPoint);
             }
-            if (figureList.ReadyFigures.Count > 0)
-            {
-                foreach (var fig in figureList.ReadyFigures)
-                {
-                    fig.Draw(e.Graphics, fig.Pen, fig.StartPoint, fig.FinishPoint);
-                }
-            }
+            Repaint(e.Graphics);           
         }
 
         private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -439,12 +473,41 @@ namespace Paint
         private void DeserializeBtn_Click(object sender, EventArgs e)
         {
             var serializer = new Serializer();
-            pictureBox1.Invalidate();
             serializer.Deserialize(figureList.ReadyFigures);
             pictureBox1.Invalidate();
             figure = null;
         }
 
+        private void PictureBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (IsPastButtonPressed)
+            {
+                Point temp = copiedFigure.StartPoint;
+                copiedFigure.StartPoint = new Point(e.X, e.Y);
+                copiedFigure.FinishPoint = new Point(copiedFigure.StartPoint.X + Math.Abs((temp.X - copiedFigure.FinishPoint.X)),
+                                                    copiedFigure.StartPoint.Y + Math.Abs((temp.Y - copiedFigure.FinishPoint.Y)));
+                figureList.ReadyFigures.Add(copiedFigure);
+                Graphics g = pictureBox1.CreateGraphics();
+                Repaint(g);
+                IsPastButtonPressed = false;
+                IsFirstPast = false;
+            }
+        }
+
+       
+
+        private void SaveCustomFigureBtn_Click(object sender, EventArgs e)
+        {
+            Serializer serializer = new Serializer();
+            if (figureList.ReadyFigures.Count != 0)
+            {
+                serializer.Serialize(figureList.ReadyFigures);
+            }
+            else
+            {
+                MessageBox.Show("Nothing to save!");
+            }
+        }
 
         private void ConfigBtn_Click(object sender, EventArgs e)
         {
@@ -486,27 +549,29 @@ namespace Paint
                 {
                     elem.Element("width").Value = penWidth.ToString();
                     elem.Element("color").Value = penColor.ToString().Remove(0, 7).Remove(penColor.ToString().Remove(0, 7).IndexOf(']'));
-                    string kek = elem.Element("color").Value;
                 }
                 foreach(XElement elem in root.Elements("canvas"))
                 {
                     elem.Attribute("color").Value = pictureBox1.BackColor.ToString().Remove(0, 7).Remove(pictureBox1.BackColor.ToString().Remove(0, 7).IndexOf(']'));
                 }
-                MessageBox.Show("Current configuration saved. Restart the application to activate it!");
+                MessageBox.Show("Current configuration saved. Restart the application to activate it!", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
-                MessageBox.Show("Restart the application for configuration settings to be activated");
+                MessageBox.Show("Restart the application for configuration settings to be activated", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            xDoc.Save("../../config.xml");
-
-            //Init();
+            try
+            {
+                xDoc.Save("../../config.xml");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
 
-
-
         // .dll plugins adding
-        public void AddPlugins()
+        private void AddPlugins()
         {
             // find a directory of .exe file      
             string AddInDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -534,6 +599,62 @@ namespace Paint
                     MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void AddUserFigures()
+        {
+            UserFigure.fieldHeight = pictureBox1.Size.Width;
+            UserFigure.fieldWidth = pictureBox1.Size.Height;
+            String localDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var userFiguresFiles = Directory.EnumerateFiles(localDirectory, "*UserFigure.txt");
+            ToolStripMenuItem item;
+            Button button;
+            int X = 700;
+            int Y = 800;
+            foreach (var userFigureFile in userFiguresFiles)
+            {
+                try
+                {
+                    int i = 1;
+                    Stream fileStream = File.Open(userFigureFile, FileMode.Open);
+                    Serializer serializer = new Serializer();
+                    UserFigure userFigure = new UserFigure() { userFigureList = serializer.Deserialize_UserFigure(fileStream) };
+                    /* button = new Button();
+                     button.Tag = userFigure;
+                     button.Text = "UserFigure" + i.ToString(); //+ Array.IndexOf((Array)userFiguresFiles, userFigureFile).ToString();
+                     i++;
+                     button.Click += new EventHandler(UserFigureButton_Click);
+                     button.Location = new Point(X, Y);
+                     Y += 50;
+                     button.Name = button.Text;
+                     button.Size = new Size(70, 30);
+                     button.UseVisualStyleBackColor = true;
+                     button.Visible = true;
+                     this.Controls.Add(button);
+                     button.BringToFront();
+                     if (Controls.Contains(button))
+                         MessageBox.Show("haha" + button.Name + button.Location.ToString());*/
+                    item = new ToolStripMenuItem()
+                    {
+                        Tag = userFigure
+                    };
+                    item.Click += new EventHandler(UserFigureButton_Click);
+                    toolStripMenuItem1.DropDownItems.Add(item);
+
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+
+            
+            /*catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }*/
         }
     }
 }

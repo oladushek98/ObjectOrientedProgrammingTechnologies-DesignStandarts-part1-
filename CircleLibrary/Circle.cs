@@ -19,5 +19,10 @@ namespace CircleLibrary
                 graphics.DrawEllipse(pen, StartPoint.X, StartPoint.Y, Width, Width);
             }
         }
+
+        public override object Clone()
+        {
+            return (Circle)MemberwiseClone();
+        }
     }
 }

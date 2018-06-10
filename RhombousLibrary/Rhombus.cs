@@ -13,5 +13,10 @@ namespace RhombousLibrary
                                                        new Point(StartPoint.X - (FinishPoint.X - StartPoint.X), FinishPoint.Y)};
             graphics.DrawPolygon(pen, points);
         }
+
+        public override object Clone()
+        {
+            return (Rhombus)MemberwiseClone();
+        }
     }
 }

@@ -21,10 +21,12 @@ namespace Paint
         readonly JsonSerializerSettings settings = new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All };
         public void Serialize(List<Figure> list)
         {
+            saveDialog.DefaultExt = ".json";
+            saveDialog.Filter = "Text files (*.txt)|*txt| JSON files (*.json)|*json";
+            saveDialog.ShowDialog();
+            string fileName = saveDialog.FileName;
             try
-            {
-                saveDialog.ShowDialog();
-                string fileName = saveDialog.FileName;
+            {                
                 using (FileStream fs = new FileStream(fileName, FileMode.OpenOrCreate | FileMode.Truncate))
                 {
                     var json = JsonConvert.SerializeObject(list, Formatting.None, settings);
@@ -32,6 +34,7 @@ namespace Paint
                     writeStream.Write(json);
                     writeStream.Flush();
                 }
+
             }
             catch (Exception ex)
             {
@@ -41,7 +44,10 @@ namespace Paint
 
         public void Deserialize(List<Figure> list)
         {
-            list.Clear();
+            openDialog.DefaultExt = ".json";
+            openDialog.Filter = "Text files (*.txt)|*txt| JSON files (*.json)|*json";
+            if (list != null)
+                list.Clear();
             openDialog.ShowDialog();
             fileName =  openDialog.FileName;
             try
@@ -65,6 +71,35 @@ namespace Paint
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public List<Figure> Deserialize_UserFigure(Stream fStream)
+        {
+            try
+            {
+                List<Figure> list = new List<Figure>();
+                using (fStream)
+                {
+                    try
+                    {
+                        var json = new StreamReader(fStream).ReadToEnd();
+                        var figures = JsonConvert.DeserializeObject<List<Figure>>(json, settings);
+                        foreach (var figure in figures)
+                            list.Add(figure);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        list.Clear();
+                    }
+                }
+                return list;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return Form1.figureList.ReadyFigures;
             }
         }
     }

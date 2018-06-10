@@ -11,5 +11,10 @@ namespace LineLibrary
         {
             graphics.DrawLine(pen, StartPoint, FinishPoint);
         }
+
+        public override object Clone()
+        {
+            return (Line)MemberwiseClone();
+        }
     }
 }
